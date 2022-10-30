@@ -382,12 +382,12 @@ func NewMachine(ctx context.Context, cfg Config, opts ...Opt) (*Machine, error) 
 
 	if m.logger == nil {
 		logger := log.New()
-
+		logger.Level = log.DebugLevel
 		m.logger = log.NewEntry(logger)
 	}
 
 	if m.client == nil {
-		m.client = NewClient(cfg.SocketPath, m.logger, false)
+		m.client = NewClient(cfg.SocketPath, m.logger, true)
 	}
 
 	if cfg.ForwardSignals == nil {
