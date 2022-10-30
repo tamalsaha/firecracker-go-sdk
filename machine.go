@@ -814,12 +814,15 @@ func (m *Machine) createBootSource(ctx context.Context, imagePath, initrdPath, k
 }
 
 func (m *Machine) createNetworkInterface(ctx context.Context, iface NetworkInterface, iid int) error {
-	ifaceID := strconv.Itoa(iid)
-
 	if iface.StaticConfiguration == nil {
 		// this should not be possible, but check nil anyways to prevent a panic
 		// if there is a bug
 		return errors.New("invalid nil state for network interface")
+	}
+
+	ifaceID := strconv.Itoa(iid)
+	if iface.StaticConfiguration.IPConfiguration != nil {
+		ifaceID = iface.StaticConfiguration.IPConfiguration.IfName
 	}
 
 	m.logger.Printf("Attaching NIC %s (hwaddr %s) at index %s",
